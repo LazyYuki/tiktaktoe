@@ -9,15 +9,16 @@ class ai:
         return -1, -1
 
 class tiktaktoe:
-    size = 3
     currentPlayer = 0
     clicked = False
 
     def __init__(self, _screen) -> None:
         self.screen = _screen
+        self.size = settings.SIZE
         self.reset()
         self.setupDraw()
         self.ai = ai(self.game)
+        self.size = settings.SIZE
 
     def reset(self):
         self.game = [[0 for _ in range(self.size)] for __ in range(self.size)]
@@ -101,7 +102,7 @@ class tiktaktoe:
         x = pos[0] - self.startX
         y = pos[1] - self.startY
 
-        if x >= 0 and y >= 0 and x <= settings.CUBESIZE * 3 and y <= settings.CUBESIZE * 3:
+        if x >= 0 and y >= 0 and x <= settings.CUBESIZE * self.size and y <= settings.CUBESIZE * self.size:
             i = math.floor(x / settings.CUBESIZE)
             j = math.floor(y / settings.CUBESIZE)
 
@@ -110,8 +111,12 @@ class tiktaktoe:
         return -1, -1
 
     def setupDraw(self):
-        self.startX = settings.WIDTH / 2 - settings.CUBESIZE / 2 - settings.CUBESIZE
-        self.startY = settings.HEIGHT/ 2 - settings.CUBESIZE / 2 - settings.CUBESIZE
+        if self.size % 2 == 0:
+            self.startX = settings.WIDTH / 2 - (settings.CUBESIZE * math.floor(self.size / 2))
+            self.startY = settings.HEIGHT/ 2 - (settings.CUBESIZE * math.floor(self.size / 2))
+        else:
+            self.startX = settings.WIDTH / 2 - settings.CUBESIZE / 2 - (settings.CUBESIZE * math.floor(self.size / 2))
+            self.startY = settings.HEIGHT/ 2 - settings.CUBESIZE / 2 - (settings.CUBESIZE * math.floor(self.size / 2))
 
     def drawCircle(self, pos):
         pygame.draw.circle(self.screen, settings.WHITE, pos, settings.CUBESIZE / 2 * 0.8, 3)
@@ -122,8 +127,8 @@ class tiktaktoe:
 
     def draw(self):
         for i in range(self.size + 1):
-            pygame.draw.line(self.screen, settings.WHITE, (self.startX, self.startY + settings.CUBESIZE * i), (self.startX + settings.CUBESIZE * 3, self.startY + settings.CUBESIZE * i), 3)
-            pygame.draw.line(self.screen, settings.WHITE, (self.startX + settings.CUBESIZE * i, self.startY), (self.startX + settings.CUBESIZE * i, self.startY + settings.CUBESIZE * 3), 3)
+            pygame.draw.line(self.screen, settings.WHITE, (self.startX, self.startY + settings.CUBESIZE * i), (self.startX + settings.CUBESIZE * self.size, self.startY + settings.CUBESIZE * i), 3)
+            pygame.draw.line(self.screen, settings.WHITE, (self.startX + settings.CUBESIZE * i, self.startY), (self.startX + settings.CUBESIZE * i, self.startY + settings.CUBESIZE * self.size), 3)
 
         for i in range(self.size):
             for j in range(self.size):
