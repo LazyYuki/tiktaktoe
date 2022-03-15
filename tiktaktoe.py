@@ -1,4 +1,4 @@
-import pygame, settings, math
+import pygame, settings, math, random
 
 class ai:
     def __init__(self, _game) -> None:
@@ -79,7 +79,7 @@ class tiktaktoe:
             i, j = self.ai.move()
             aiMove = True
 
-        if pygame.mouse.get_pressed()[0] and not self.clicked or aiMove:
+        if (pygame.mouse.get_pressed()[0] and not self.clicked) or aiMove:
             if not aiMove:
                 self.clicked = True
                 i, j = self.getMouseFieldIndex(mouse)
@@ -91,12 +91,11 @@ class tiktaktoe:
                     if self.winCheck(j, i):
                         print("Player", self.currentPlayer + 1, "has won!")
                     else:
+                        aiMove = False
                         self.currentPlayer = not self.currentPlayer
 
-            if self.clicked and not pygame.mouse.get_pressed()[0]:
-                self.clicked = False
-
-
+        if self.clicked and not pygame.mouse.get_pressed()[0]:
+            self.clicked = False
 
     def getMouseFieldIndex(self, pos):
         x = pos[0] - self.startX
